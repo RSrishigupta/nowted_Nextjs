@@ -3,10 +3,10 @@ import { Stack, Button } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../assets/logo.svg";
-import searchicon from "../assets/search.svg";
-import close from "../assets/close.svg";
 import CreateNote from "./CreateNote";
 import Search from "./search";
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 export default function Header() {
   const [showSearch, setShowSearch] = useState(false);
@@ -28,11 +28,12 @@ export default function Header() {
           <Image src={logo} alt="logo" />
         </Link>
 
-        <Button onClick={handleSearchClick}>
+        <Button onClick={handleSearchClick} color="inherit">
         {showSearch ?  
-        <Image src={close} alt="close icon" width="20"  /> 
+       <CloseOutlinedIcon/>
         :  
-        <Image src={searchicon} alt="search icon" width="20"  />}
+        <SearchOutlinedIcon/>
+        }
         </Button>
       </Stack>
 

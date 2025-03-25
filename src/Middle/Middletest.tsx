@@ -5,10 +5,12 @@ import Card from "./card";
 import { usePathname } from "next/navigation";
 import { Box, Button, styled, Typography } from "@mui/material";
 
-function Middletest() {
-  const Mode = decodeURIComponent(usePathname().split("/").filter(Boolean)[0] || "");
-  const folderId = decodeURIComponent(usePathname().split("/").filter(Boolean)[1] || "");
+export default function MiddleColumn() {
+  const pathParts = usePathname().split("/").filter(Boolean);
+  const Mode = decodeURIComponent(pathParts[0] || "");
+  const folderId = decodeURIComponent(pathParts[1] || "");
 
+  // infinite query data  auto refetch when clicking 
   const {
     data: notes,
     isLoading: notesLoading,
@@ -37,10 +39,9 @@ function Middletest() {
           default:
             response = [];
         }
-        const data = Array.isArray(response) ? response : response?.data || [];
         return {
-          data,
-          nextPage: data.length >= 10 ? pageParam + 1 : null
+          data: response?.data || response || [],
+          nextPage: response?.length >= 10 ? pageParam + 1 : null
         };
       } catch (error) {
         console.error("Error fetching notes:", error);
@@ -52,12 +53,7 @@ function Middletest() {
     enabled: !!Mode,
   });
 
-  const allNotes = notes?.pages.flatMap(page => 
-    Array.isArray(page?.data) ? page.data : []
-  ) || [];
-
-  console.log("All notes:", allNotes);
-  console.log("Has next page:", hasNextPage); 
+  const allNotes = notes?.pages.flatMap(page => page?.data || []) || [];
 
   const { data: folderName } = useQuery({
     queryKey: ["folderName", folderId],
@@ -142,7 +138,6 @@ function Middletest() {
   );
 }
 
-export default Middletest;
 const StyledButton = styled(Button)({
   backgroundColor: "#1f1f1f",
   color: "white",

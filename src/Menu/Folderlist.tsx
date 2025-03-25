@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import addfolder from "../assets/addfolder.svg";
-import folderimg from "../assets/folder.svg";
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import delimg from "../assets/del.svg";
 import { fetchFolders, addFolder, deleteFolder, Folder } from "../Api/api";
 import { useState } from "react";
@@ -70,7 +70,7 @@ function FolderList() {
         <Typography variant="body1" color="white">
           Folders
         </Typography>
-        <IconButton onClick={() => addFolderMutation.mutate()} color="primary">
+        <IconButton onClick={() => addFolderMutation.mutate()}>
           <Image src={addfolder} alt="add folder" />
         </IconButton>
       </Box>
@@ -98,8 +98,7 @@ function FolderList() {
             >
               {editingFolderId === folder.id ? (
                 <Box display="flex" alignItems="center" position="relative" width="100%">
-                  <Image src={folderimg} alt="folder logo" style={{ marginRight: 8 }} />
-
+                  <FolderOutlinedIcon />
                   <TextField
                     value={folderName}
                     onChange={(e) => setFolderName(e.target.value)}
@@ -123,7 +122,7 @@ function FolderList() {
               ) : (
                 <Link href={`/folder/${folder.id}`} style={{ textDecoration: "none", color: "white", width: "100%" }}>
                   <Box display="flex" alignItems="center" gap={1} onDoubleClick={() => handleDoubleClick(folder)}>
-                    <Image src={folderimg} alt="folder logo" />
+                    <FolderOutlinedIcon />
                     <ListItemText primary={folder.name} />
                   </Box>
                 </Link>

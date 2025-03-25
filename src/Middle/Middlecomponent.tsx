@@ -21,7 +21,6 @@ function Middlecomponent() {
   const Mode = decodeURIComponent(usePathname().split("/").filter(Boolean)[0] || "");
   const folderId = decodeURIComponent(usePathname().split("/").filter(Boolean)[1] || "");
 
-  // Fetching notes dynamically based on the mode using React Query
   const { data: notes = [], isLoading: notesLoading, error: notesError } = useQuery({
     queryKey: ["notes", Mode, folderId],
     queryFn: async () => {
@@ -38,14 +37,13 @@ function Middlecomponent() {
           return [];
       }
     },
-    enabled: !!Mode, // Run query only if Mode is defined
+    enabled: !!Mode, 
   });
 
-  // Fetching folder name using React Query
   const { data: folderName } = useQuery({
     queryKey: ["folderName", folderId],
     queryFn: () => fetchFolderById(folderId),
-    enabled: !!folderId && Mode === "folder", // Run query only if folderId exists and mode is "folder"
+    enabled: !!folderId && Mode === "folder", 
   });
 
   return (
@@ -122,10 +120,10 @@ const StyledButton = styled(Button)({
   color: "white",
   fontSize: "1rem",
   borderRadius: "4px",
-  transition: "transform 0.3s, box-shadow 0.3s, background-color 0.3s", // Smooth transition for hover effects
+  transition: "transform 0.3s, box-shadow 0.3s, background-color 0.3s", 
   "&:hover": {
-    backgroundColor: "#2d2d2d", // Change background color to blue on hover
-    transform: "translateY(-2px)", // Move the button upward to create levitation
-    boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)", // Add a stronger shadow for depth
+    backgroundColor: "#2d2d2d", 
+    transform: "translateY(-2px)", 
+    boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)", 
   },
 });

@@ -24,17 +24,14 @@ function Recent() {
     const RecentApi = "https://nowted-server.remotestate.com/notes/recent";
     const pathname = usePathname();
 
-    // Using TanStack Query to fetch data
     const { data: recentNotes, isLoading, isError } = useQuery<DataType[]>({
         queryKey: ['recentNotes'],
         queryFn: async () => {
             const response = await axios.get(RecentApi);
             return response.data.recentNotes;
         },
-        staleTime: 1000 * 60 * 5, // 5 minutes before data becomes stale
     });
 
-    // Function to check if a note is active
     const isActive = (noteId: string, folderId: string) => {
         return pathname === `/folder/${folderId}/Notes/${noteId}`;
     };

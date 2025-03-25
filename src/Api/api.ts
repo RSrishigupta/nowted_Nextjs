@@ -56,7 +56,7 @@ export const fetchAllTrashNotes = async (page = 1, limit = 10) => {
 export const createNote = async (folderId: string) => {
   try {
     if (!folderId) {
-      alert("Select a folder first"); // Display alert when folderId is missing
+      alert("Select a folder first"); 
       return false;
     }
     await axios.post(`https://nowted-server.remotestate.com/notes`, {
@@ -70,7 +70,7 @@ export const createNote = async (folderId: string) => {
     return true;
   } catch (error) {
     console.error("Error creating note:", error);
-    alert("Failed to create note. Please try again."); // Display alert on error
+    alert("Failed to create note. Please try again."); 
     return false;
   }
 };

@@ -23,7 +23,6 @@ const Trash: React.FC<TrashProps> = ({ id}) => {
     },
     onSuccess: () => {
       alert('Note deleted successfully');
-      // Invalidate the notes query to refetch the updated list
       queryClient.invalidateQueries({ queryKey: ['notes'] });
       queryClient.invalidateQueries({ queryKey: ['noteData'] });
 
@@ -45,7 +44,7 @@ const Trash: React.FC<TrashProps> = ({ id}) => {
     onClick={deleteNote}
     sx={{
       display: 'flex',
-      justifyContent: 'flex-start', // Align content to the left
+      justifyContent: 'flex-start', 
       gap: '12px',
       '&:hover': {
         backgroundColor: 'red',

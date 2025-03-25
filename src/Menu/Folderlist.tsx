@@ -9,27 +9,27 @@ import delimg from "../assets/del.svg";
 import { fetchFolders, addFolder, deleteFolder, Folder } from "../Api/api";
 import { useState } from "react";
 import axios from "axios";
+import { usePathname } from "next/navigation";
 
 function FolderList() {
-  const queryClient = useQueryClient(); // Access the cache
+  const queryClient = useQueryClient();
   const [editingFolderId, setEditingFolderId] = useState<string | null>(null);
   const [folderName, setFolderName] = useState<string>("");
+  const pathname = usePathname();
+  const currentFolderId = pathname.split("/")[2];
 
-  // Use the API call in React Query hooks
   const { data: folders = [], isLoading, isError, error } = useQuery<Folder[]>({
     queryKey: ["folders"],
     queryFn: fetchFolders,
   });
 
-  // Mutation for adding a folder
   const addFolderMutation = useMutation({
     mutationFn: addFolder,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["folders"] }); // Refetch folders after adding
+      queryClient.invalidateQueries({ queryKey: ["folders"] });
     },
   });
 
-  // Mutation for deleting a folder
   const deleteFolderMutation = useMutation({
     mutationFn: (folderId: string) => deleteFolder(folderId),
     onSuccess: () => {
@@ -37,31 +37,27 @@ function FolderList() {
     },
   });
 
-  // Mutation for editing a folder's name (PATCH request)
   const editFolderNameMutation = useMutation({
     mutationFn: async ({ folderId, name }: { folderId: string; name: string }) => {
       return await axios.patch(`https://nowted-server.remotestate.com/folders/${folderId}`, { name });
     },
     onSuccess: () => {
-      // Invalidate both "folders" and "folderName" queries
       queryClient.invalidateQueries({ queryKey: ["folders"] });
-      queryClient.invalidateQueries({ queryKey: ["folderName"] }); // Invalidate folderName query
-      setEditingFolderId(null); // Stop editing mode after success
+      queryClient.invalidateQueries({ queryKey: ["folderName"] });
+      setEditingFolderId(null);
     },
   });
 
-  // Handle entering edit mode on double-click
   const handleDoubleClick = (folder: Folder) => {
     setEditingFolderId(folder.id);
-    setFolderName(folder.name); // Set initial value for editing
+    setFolderName(folder.name);
   };
 
-  // Handle submitting the new folder name (on pressing Enter or losing focus)
   const handleNameSubmit = (folderId: string) => {
     if (folderName.trim()) {
       editFolderNameMutation.mutate({ folderId, name: folderName.trim() });
     } else {
-      setEditingFolderId(null); // Exit edit mode if input is empty
+      setEditingFolderId(null);
     }
   };
 
@@ -90,36 +86,36 @@ function FolderList() {
                 width: "100%",
                 py: 0.5,
                 px: 2,
+                backgroundColor: currentFolderId === folder.id ? "#3a3a3a" : "transparent",
                 transition: "transform 0.2s, box-shadow 0.2s, background-color 0.2s",
                 "&:hover": {
                   backgroundColor: "#2d2d2d",
                   borderRadius: "2px",
-                  transform: "translateY(-2px)", // Levitate the card
-                  boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.3)", // Add shadow for depth
+                  transform: "translateY(-2px)",
+                  boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.3)",
                 },
               }}
             >
-              {/* Editable Folder Name */}
               {editingFolderId === folder.id ? (
                 <Box display="flex" alignItems="center" position="relative" width="100%">
-                  <Image src={folderimg} alt="folder logo" style={{ marginRight: 8 }} /> {/* Folder logo remains visible */}
+                  <Image src={folderimg} alt="folder logo" style={{ marginRight: 8 }} />
 
                   <TextField
                     value={folderName}
                     onChange={(e) => setFolderName(e.target.value)}
-                    onBlur={() => handleNameSubmit(folder.id)} // Submit on losing focus
-                    onKeyDown={(e) => e.key === "Enter" && handleNameSubmit(folder.id)} // Submit on Enter key
+                    onBlur={() => handleNameSubmit(folder.id)}
+                    onKeyDown={(e) => e.key === "Enter" && handleNameSubmit(folder.id)}
                     autoFocus
                     sx={{
                       input: {
-                        color: "white", // Set white text color for input
-                        width: "150px", // Adjust the input width to prevent it from taking too much space
-                        padding: "2px 8px", // Compact padding for better fit
-                        backgroundColor: "#1E3A8A", // Optional: Add background to make it visually distinct
-                        borderRadius: "4px", // Rounded corners for smooth appearance
+                        color: "white",
+                        width: "150px",
+                        padding: "2px 8px",
+                        backgroundColor: "#1E3A8A",
+                        borderRadius: "4px",
                       },
                       "& .MuiInputBase-root": {
-                        padding: 0, // Remove unnecessary padding around the input
+                        padding: 0,
                       },
                     }}
                   />

@@ -9,7 +9,6 @@ function Middletest() {
   const Mode = decodeURIComponent(usePathname().split("/").filter(Boolean)[0] || "");
   const folderId = decodeURIComponent(usePathname().split("/").filter(Boolean)[1] || "");
 
-  // Enhanced query with better error handling and logging
   const {
     data: notes,
     isLoading: notesLoading,
@@ -38,10 +37,6 @@ function Middletest() {
           default:
             response = [];
         }
-        
-        console.log("API Response:", response); // Debugging log
-        
-        // Handle both array and object responses
         const data = Array.isArray(response) ? response : response?.data || [];
         return {
           data,
@@ -57,15 +52,13 @@ function Middletest() {
     enabled: !!Mode,
   });
 
-  // Safely flatten notes with proper fallbacks
   const allNotes = notes?.pages.flatMap(page => 
     Array.isArray(page?.data) ? page.data : []
   ) || [];
 
-  console.log("All notes:", allNotes); // Debugging log
-  console.log("Has next page:", hasNextPage); // Debugging log
+  console.log("All notes:", allNotes);
+  console.log("Has next page:", hasNextPage); 
 
-  // Fetching folder name
   const { data: folderName } = useQuery({
     queryKey: ["folderName", folderId],
     queryFn: () => fetchFolderById(folderId),

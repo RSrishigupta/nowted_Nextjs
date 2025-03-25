@@ -16,10 +16,9 @@ interface OptionProps {
   foldername: string;
 }
 
-// Custom styled Menu with blue background
 const StyledMenu = styled(Menu)(({ theme }) => ({
   '& .MuiPaper-root': {
-    backgroundColor: '#2d2d2d', // Tailwind's blue-900 equivalent
+    backgroundColor: '#2d2d2d', 
     color: theme.palette.common.white,
   },
 }));

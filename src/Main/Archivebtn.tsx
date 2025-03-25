@@ -27,7 +27,6 @@ const Archivebtn: React.FC<ArchivebtnProps> = ({ isArc, id, folderid, Mode }) =>
       return newArchiveState;
     },
     onMutate: (newArchiveState) => {
-      // Optimistically update the UI
       setIsarc(newArchiveState);
     },
     onSuccess: () => {
@@ -35,7 +34,6 @@ const Archivebtn: React.FC<ArchivebtnProps> = ({ isArc, id, folderid, Mode }) =>
       alert('Notes Archived Successfully');
     },
     onError: () => {
-      // Rollback on error
       setIsarc(!isarc);
       console.error('Error archiving note');
     },
@@ -46,7 +44,6 @@ const Archivebtn: React.FC<ArchivebtnProps> = ({ isArc, id, folderid, Mode }) =>
     archiveMutation.mutate(newArchiveState);
   };
 
-  // Determine the href based on the Mode
   const href = Mode === "Archive" ? "/Archive" : Mode === "Favorites" ? "/Favorites" : `/${Mode}/${folderid}`;
 
   return (

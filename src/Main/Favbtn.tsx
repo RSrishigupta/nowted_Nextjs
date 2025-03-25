@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-// import Link from 'next/link';
 import Image from 'next/image';
 import { Button, Box } from '@mui/material';
 import fav from '../../src/assets/fav.svg';
-// import { useParams } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
@@ -18,7 +16,6 @@ interface FavbtnProps {
 
 const Favbtn: React.FC<FavbtnProps> = ({ isFav, id , Mode }) => {
   const [isfav, setIsfav] = useState(isFav);
-  // const { folderId } = useParams();
   const router = useRouter();
   const queryClient = useQueryClient();
   const updateFavoriteMutation = useMutation({
@@ -50,15 +47,9 @@ const Favbtn: React.FC<FavbtnProps> = ({ isFav, id , Mode }) => {
     const newFavState = !isfav;
     updateFavoriteMutation.mutate(newFavState);
   };   
-  // const href = Mode === "Archive" ? "/Archive" : Mode === "Favorites" ? "/Favorites" : `/${Mode}/${folderid}/Notes/${id}`;
   return (
     <Box>
-      <Box
-        // href={folderId ? `/folder/${folderid}/Notes/${id}` : `/${Mode}`}
-      // href={href}
-        // passHref
-        // legacyBehavior
-      >
+      <Box>
         <Button
           onClick={isFavchange}
           sx={{

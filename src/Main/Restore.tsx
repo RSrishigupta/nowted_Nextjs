@@ -3,7 +3,6 @@ import restore from "../assets/restore.svg";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-// import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
@@ -22,7 +21,7 @@ interface DataTypes {
 }
 // agr mode trash h to redirect ho jae folder is par
 function Restore() {
-   const Mode = decodeURIComponent(usePathname().split("/").filter(Boolean)[0] || "");
+  const Mode = decodeURIComponent(usePathname().split("/").filter(Boolean)[0] || "");
   const notesId = usePathname().split('/').pop();
   const queryClient = useQueryClient();
   // Fetch note data using React Query
@@ -33,10 +32,9 @@ function Restore() {
       const response = await axios.get(`https://nowted-server.remotestate.com/notes/${notesId}`);
       return response.data.note;
     },
-    enabled: !!notesId, // Only run the query if notesId exists
+    enabled: !!notesId,
   });
-const router =useRouter();
-  // Restore mutation using React Query
+  const router = useRouter();
   const restoreMutation = useMutation({
     mutationFn: async () => {
       await axios.post(`https://nowted-server.remotestate.com/notes/${notesId}/restore`);
@@ -44,7 +42,8 @@ const router =useRouter();
     onSuccess: () => {
       alert(`Note restored successfully: ${contentdata?.title}`);
       queryClient.invalidateQueries({ queryKey: ['noteData'] });
-      if (Mode==="Trash") {   router.push(`/folder/${contentdata?.folder.id}/Notes/${contentdata?.id}`) }
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      if (Mode === "Trash") { router.push(`/folder/${contentdata?.folder.id}/Notes/${contentdata?.id}`) }
     },
     onError: (error) => {
       console.error('Error restoring note:', error);
@@ -79,11 +78,7 @@ const router =useRouter();
         Don&apos;t want to lose this note? It&apos;s not too late! Just click the Restore button and it
         will be added back to your list. It&apos;s that simple.
       </Typography>
-      <Box
-        // href={`/folder/${contentdata?.folder.id}/Notes/${contentdata?.id}`}
-        // passHref
-        // legacyBehavior
-      >
+      <Box>
         <Button
           variant="contained"
           onClick={handleRestore}
@@ -93,13 +88,21 @@ const router =useRouter();
             py: '8px',
             px: '16px',
             borderRadius: '8px',
+            backgroundColor: '#1f1f1f',
+            transition: 'all 0.2s ease-in-out', 
             '&:hover': {
-              backgroundColor: "primary.dark"
+              backgroundColor: '#2d2d2d',
+              transform: 'translateY(-2px)',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+              filter: 'brightness(1.1)', 
             },
+            '&:active': {
+              transform: 'translateY(0)',
+            }
           }}
         >
           {restoreMutation.isPending ? 'Restoring...' : 'Restore'}
-        </Button> 
+        </Button>
       </Box>
     </Box>
   );

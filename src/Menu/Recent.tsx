@@ -1,10 +1,12 @@
-"use client"; // Ensures this is a Client Component in Next.js
+"use client";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
 import doc from "../assets/doc.svg";
+import { useQuery } from "@tanstack/react-query";
+
 interface DataType {
     id: string;
     folderId: string;
@@ -17,21 +19,33 @@ interface DataType {
         deletedAt: string | null;
     };
 }
+
 function Recent() {
     const RecentApi = "https://nowted-server.remotestate.com/notes/recent";
-    const [recentNotes, setRecentNotes] = useState<DataType[]>([]);
+    const pathname = usePathname();
 
-    const fetchRecentData = async () => {
-        try {
+    // Using TanStack Query to fetch data
+    const { data: recentNotes, isLoading, isError } = useQuery<DataType[]>({
+        queryKey: ['recentNotes'],
+        queryFn: async () => {
             const response = await axios.get(RecentApi);
-            setRecentNotes(response.data.recentNotes);
-        } catch (error) {
-            console.error("Error fetching recent notes:", error);
-        }
+            return response.data.recentNotes;
+        },
+        staleTime: 1000 * 60 * 5, // 5 minutes before data becomes stale
+    });
+
+    // Function to check if a note is active
+    const isActive = (noteId: string, folderId: string) => {
+        return pathname === `/folder/${folderId}/Notes/${noteId}`;
     };
-    useEffect(() => {
-        fetchRecentData();
-    }, []);
+
+    if (isLoading) {
+        return <Typography color="white">Loading...</Typography>;
+    }
+
+    if (isError) {
+        return <Typography color="white">Error loading recent notes</Typography>;
+    }
 
     return (
         <Box>
@@ -39,33 +53,40 @@ function Recent() {
                 Recents
             </Typography>
             <List>
-                {recentNotes.map((note) => (
-                    <ListItem
-                        key={note.id}
-                        component={Link}
-                        href={`/folder/${note.folder.id}/Notes/${note.id}`}
-                        sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                            color: "white",
-                            py: 0.5, 
-                            px: 2, 
-                            transition: "transform 0.2s, box-shadow 0.2s, background-color 0.2s",
-                            "&:hover": {
-                              backgroundColor: "#2d2d2d",
-                              borderRadius: "2px",
-                              transform: "translateY(-2px)", // Levitate the card
-                              boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.3)", // Add shadow for depth
-                            },
-                          }}
-                    >
-                        <Image src={doc} alt="document icon" />
-                        <ListItemText primary={note.title} />
-                    </ListItem>
-                ))}
+                {recentNotes?.map((note) => {
+                    const active = isActive(note.id, note.folder.id);
+                    return (
+                        <ListItem
+                            key={note.id}
+                            component={Link}
+                            href={`/folder/${note.folder.id}/Notes/${note.id}`}
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "8px",
+                                color:"white",
+                                py: 0.5,
+                                px: 2,
+                                backgroundColor: active ? "#2d2d2d" : "transparent",
+                                borderRadius: active ? "2px" : "0",
+                                transition: "transform 0.2s, box-shadow 0.2s, background-color 0.2s",
+                                "&:hover": {
+                                    backgroundColor: "#2d2d2d",
+                                    borderRadius: "2px",
+                                    transform: "translateY(-2px)",
+                                    boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.3)",
+                                },
+                            }}
+                        >
+                            <Image src={doc} alt="document icon" />
+                            <ListItemText 
+                                primary={note.title} 
+                               
+                            />
+                        </ListItem>
+                    );
+                })}
             </List>
-
         </Box>
     );
 }

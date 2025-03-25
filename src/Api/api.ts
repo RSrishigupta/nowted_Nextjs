@@ -66,6 +66,7 @@ export const createNote = async (folderId: string) => {
       isFavorite: false,
       isArchived: false,
     });
+    alert("Successfully created New Note....")
     return true;
   } catch (error) {
     console.error("Error creating note:", error);

@@ -45,7 +45,7 @@ function ContentPage() {
         contentdata.deletedAt ? ( // Handle the deletedAt field safely
           <Restore />
         ) : (
-          <div className="w-3/5 h-screen overflow-x-hidden overflow-y-auto">
+          <div>
             <NoteDataCard
               id={contentdata.id}
               namefolder={contentdata.folder.name}

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAllFavorites, fetchAllArchivedNotes, fetchAllTrashNotes, fetchAllNotes, fetchFolderById } from "../Api/api";
 import Card from "./card";
 import { usePathname } from "next/navigation";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, styled, Typography } from "@mui/material";
 
 interface DataTypes {
   id: string;
@@ -91,7 +91,7 @@ function Middlecomponent() {
             Error fetching notes.
           </Typography>
         ) : notes.length > 0 ? (
-          notes.map((note:DataTypes) => (
+          notes.map((note: DataTypes) => (
             <Card
               key={note.id}
               id={note.id}
@@ -108,9 +108,24 @@ function Middlecomponent() {
             No Note Available
           </Typography>
         )}
+        <StyledButton variant="contained" fullWidth>
+          Load More
+        </StyledButton>
       </Box>
     </Box>
   );
 }
 
 export default Middlecomponent;
+const StyledButton = styled(Button)({
+  backgroundColor: "#1f1f1f",
+  color: "white",
+  fontSize: "1rem",
+  borderRadius: "4px",
+  transition: "transform 0.3s, box-shadow 0.3s, background-color 0.3s", // Smooth transition for hover effects
+  "&:hover": {
+    backgroundColor: "#2d2d2d", // Change background color to blue on hover
+    transform: "translateY(-2px)", // Move the button upward to create levitation
+    boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)", // Add a stronger shadow for depth
+  },
+});

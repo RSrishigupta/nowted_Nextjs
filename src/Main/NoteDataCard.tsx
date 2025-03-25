@@ -9,6 +9,7 @@ import Options from "./Options";
 import date from "../assets/date.svg";
 import folderimage from "../assets/folder.svg";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface CardProps {
   id: string;
@@ -73,12 +74,13 @@ function NoteDataCard({
     setIsEditingContent(false);
     if (localContent !== content) updateNote.mutate({ content: localContent });
   };
-
+  const router = useRouter();
   const handleFolderChange = (e: SelectChangeEvent<string>) => {
     const selectedFolderName = e.target.value;
     const selectedFolder = folders.find((folder) => folder.name === selectedFolderName);
     if (selectedFolder && selectedFolder.id !== folderid) {
       updateNote.mutate({ folderId: selectedFolder.id });
+      router.push(`/folder/${selectedFolder.id}/Notes/${id}`)
     }
   };
 
@@ -98,7 +100,7 @@ function NoteDataCard({
               '& .MuiInputBase-input': {
                 color: 'white', // Change the text color to green
                 fontSize: '2.125rem', // Match the font size of Typography h4
-                fontWeight: 500, // Match the font weight of Typography h4
+                fontWeight: 500, // Match the font weight of Typography h4  
                 fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', // Match the font family
                 padding: 0, // Remove padding to align with Typography
               },
@@ -135,10 +137,12 @@ function NoteDataCard({
           variant="outlined"
           size="small"
           sx={{
+             
+
             backgroundColor: 'transparent', // Transparent background for the Select
             color: 'white', // White text color for the Select
             '& .MuiOutlinedInput-notchedOutline': {
-            
+              borderColor: 'transparent',
             },
             '& .MuiSvgIcon-root': {
               color: 'white', // White color for the dropdown icon
@@ -147,14 +151,33 @@ function NoteDataCard({
           MenuProps={{
             PaperProps: {
               sx: {
+                
+                height:"40vh",
                 backgroundColor: '#2d2d2d', // Gray background for the menu list
                 color: 'white', // White text color for the menu items
+                "&::-webkit-scrollbar": {
+                  width: "6px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "darkgrey",
+                  borderRadius: "4px",
+                },
+                "&::-webkit-scrollbar-track": {
+                  backgroundColor: "#2C2C2C",
+                },
               },
             },
           }}
         >
           {folders.map((folder) => (
-            <MenuItem key={folder.id} value={folder.name} sx={{ color: 'white' }}>
+            <MenuItem key={folder.id} value={folder.name} sx={{ color: 'white' ,
+              "&:hover": {
+                backgroundColor: "#1f1f1f",
+                borderRadius: "2px",
+                transform: "translateY(-2px)", // Levitate the card
+                boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.3)", // Add shadow for depth
+              },
+            }}>
               {folder.name}
             </MenuItem>
           ))}

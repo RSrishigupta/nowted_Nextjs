@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Image from 'next/image';
-import { Box, Button } from '@mui/material';
+import {Button} from '@mui/material';
 import del from '../assets/del.svg';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -39,27 +39,27 @@ const Trash: React.FC<TrashProps> = ({ id}) => {
   };
 
   return (
-    <>
-      <Box>
-        <Button
-          onClick={deleteNote}
-          sx={{
-            display: 'flex',
-            gap: '12px', // Equivalent to gap-3
-            '&:hover': {
-              backgroundColor: 'red', // Equivalent to hover:bg-gray-500
-            },
-            borderRadius: '4px', // Equivalent to rounded-md
-            cursor: 'pointer',
-            textTransform: 'none', // Prevents uppercase transformation
-            color: 'inherit', // Inherits text color
-          }}
-        >
-          <Image src={del} alt="del Icon" /> {/* Adjust width and height as needed */}
-          <Box width="100px">Trash</Box>
-        </Button>
-      </Box>
-    </>
+   
+    <Button
+    fullWidth
+    onClick={deleteNote}
+    sx={{
+      display: 'flex',
+      justifyContent: 'flex-start', // Align content to the left
+      gap: '12px',
+      '&:hover': {
+        backgroundColor: 'red',
+      },
+      borderRadius: '4px',
+      cursor: 'pointer',
+      textTransform: 'none',
+      color: 'inherit',
+    }}
+  >
+    <Image src={del} alt="Trash Icon" />
+   Trash
+  </Button>
+     
   );
 };
 

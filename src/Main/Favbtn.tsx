@@ -14,7 +14,7 @@ interface FavbtnProps {
   Mode:string;
 }
 
-const Favbtn: React.FC<FavbtnProps> = ({ isFav, id , Mode }) => {
+const Favbtn = ({ isFav, id , Mode }:FavbtnProps) => {
   const [isfav, setIsfav] = useState(isFav);
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -69,6 +69,7 @@ const Favbtn: React.FC<FavbtnProps> = ({ isFav, id , Mode }) => {
         </Button>
       </Box>
     </Box>
+    
   );
 };
 

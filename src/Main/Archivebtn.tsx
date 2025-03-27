@@ -13,7 +13,7 @@ interface ArchivebtnProps {
   Mode: string;
 }
 
-const Archivebtn: React.FC<ArchivebtnProps> = ({ isArc, id, folderid, Mode }) => {
+const Archivebtn = ({ isArc, id, folderid, Mode }:ArchivebtnProps) => {
   const [isarc, setIsarc] = useState(isArc);
   const queryClient = useQueryClient();
 
@@ -22,7 +22,6 @@ const Archivebtn: React.FC<ArchivebtnProps> = ({ isArc, id, folderid, Mode }) =>
       await axios.patch(
         `https://nowted-server.remotestate.com/notes/${id}`,
         { isArchived: newArchiveState },
-        { headers: { 'Content-Type': 'application/json' } }
       );
       return newArchiveState;
     },

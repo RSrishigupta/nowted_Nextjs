@@ -12,7 +12,7 @@ interface TrashProps {
   folderid: string;
 }
 
-const Trash: React.FC<TrashProps> = ({ id}) => {
+const Trash= ({ id}:TrashProps) => {
   const delApi = `https://nowted-server.remotestate.com/notes/${id}`;
 
   const queryClient = useQueryClient();
